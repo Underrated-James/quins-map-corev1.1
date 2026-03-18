@@ -126,4 +126,158 @@
   html {
     @apply font-sans;
     }
+  .maplibregl-popup-content {
+    @apply bg-transparent! shadow-none! p-0! rounded-none!;
+    }
+  .maplibregl-popup-tip {
+    @apply hidden!;
+    }
+}
+
+.custom-pin {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+}
+
+.custom-pin .pin-core {
+  width: 12px;
+  height: 12px;
+  border-radius: 999px;
+  background: #111111;
+  border: 2px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.store-map {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.store-map__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  z-index: 900;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.store-pin {
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(79, 139, 255, 0.2);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.4);
+}
+
+.store-pin__core {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #4f8bff;
+  border: 2px solid #ffffff;
+}
+
+.customer-pin,
+.seller-pin {
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.2);
+  box-shadow: 0 8px 18px rgba(15, 23, 42, 0.45);
+}
+
+.customer-pin__core,
+.seller-pin__core {
+  width: 11px;
+  height: 11px;
+  border-radius: 999px;
+  border: 2px solid #ffffff;
+}
+
+.customer-pin__core {
+  background: #3b82f6;
+}
+
+.seller-pin {
+  background: rgba(251, 146, 60, 0.2);
+}
+
+.seller-pin__core {
+  background: #22c55e;
+}
+
+.marker-content {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+}
+
+.marker-label {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  color: #f8fafc;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.gis-panel {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  z-index: 1000;
+  display: grid;
+  gap: 8px;
+  width: 180px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 12px;
+  letter-spacing: 0.01em;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.35);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 180ms ease, transform 180ms ease;
+  pointer-events: none;
+}
+
+.gis-panel__title {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.gis-panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.gis-panel.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }

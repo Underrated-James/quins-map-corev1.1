@@ -1,0 +1,9 @@
+declare module 'leaflet.heat';
+declare module 'leaflet.vectorgrid';
+declare module 'leaflet.markercluster';
+declare module 'leaflet-draw';
+declare module 'leaflet-routing-machine';
+declare module 'leaflet.markercluster/dist/MarkerCluster.css';
+declare module 'leaflet.markercluster/dist/MarkerCluster.Default.css';
+declare module 'leaflet-draw/dist/leaflet.draw.css';
+declare module 'leaflet-routing-machine/dist/leaflet-routing-machine.css';
