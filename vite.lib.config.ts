@@ -13,27 +13,21 @@ export default defineConfig({
     lib: {
       entry: {
         index: path.resolve(__dirname, "src/lib.ts"),
-        routing: path.resolve(__dirname, "src/routing.ts"),
       },
       formats: ["es", "cjs"],
-      name: "LeafletKit",
+      name: "QuinsMap",
     },
     rollupOptions: {
       external: [
         "react",
         "react-dom",
-        "leaflet",
-        "leaflet-routing-machine",
-        "leaflet-draw",
-        "leaflet.markercluster",
-        "leaflet.heat",
-        "leaflet.vectorgrid",
+        "maplibre-gl",
       ],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
-          leaflet: "L",
+          "maplibre-gl": "maplibregl",
         },
       },
     },

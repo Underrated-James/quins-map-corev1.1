@@ -1,0 +1,5 @@
+﻿src/components/ui/map/BottomSheetMap.tsx(3,41): error TS6133: 'useEffect' is declared but its value is never read.
+src/components/ui/map/GeofenceEditor.tsx(202,9): error TS6133: 'deleteZone' is declared but its value is never read.
+src/components/ui/map/MapStates.tsx(3,8): error TS6133: 'React' is declared but its value is never read.
+src/components/ui/map/SearchPlacesPanel.tsx(49,23): error TS2554: Expected 1 arguments, but got 0.
+src/components/ui/map/SearchPlacesPanel.tsx(51,20): error TS2554: Expected 1 arguments, but got 0.
