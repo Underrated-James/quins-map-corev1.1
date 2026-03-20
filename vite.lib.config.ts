@@ -22,6 +22,7 @@ export default defineConfig({
       external: [
         "react",
         "react-dom",
+        "react/jsx-runtime",
         "maplibre-gl",
       ],
       output: {
