@@ -199,13 +199,7 @@ function GeofenceEditor({
     map.getCanvas().style.cursor = "";
   }, [map]);
 
-  const deleteZone = useCallback(
-    (zoneId: string) => {
-      onChange?.(zones.filter((z) => z.id !== zoneId));
-    },
-    [zones, onChange]
-  );
-
+// Unused delete block removed
   const clearAll = useCallback(() => {
     onChange?.([]);
   }, [onChange]);

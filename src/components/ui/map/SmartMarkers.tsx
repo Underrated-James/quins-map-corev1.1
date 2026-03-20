@@ -1,6 +1,6 @@
 "use client";
 
-import type MapLibreGL from "maplibre-gl";
+import MapLibreGL from "maplibre-gl";
 import type * as GeoJSON from "geojson";
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { createPortal } from "react-dom";
@@ -108,31 +108,29 @@ function DOMMarkers<P extends GeoJSON.GeoJsonProperties>({
     containersRef.current = [];
 
     // Create DOM markers via dynamic import
-    import("maplibre-gl").then((ML) => {
-      const Marker = ML.Marker ?? ML.default?.Marker;
-      if (!Marker) return;
+    const Marker = MapLibreGL.Marker;
+    if (!Marker) return;
 
-      data.features.forEach((feature) => {
-        const [lng, lat] = feature.geometry.coordinates;
-        const el = document.createElement("div");
-        el.style.cursor = "pointer";
+    data.features.forEach((feature) => {
+      const [lng, lat] = feature.geometry.coordinates;
+      const el = document.createElement("div");
+      el.style.cursor = "pointer";
 
-        if (onPointClick) {
-          el.addEventListener("click", () => {
-            onPointClick(feature, [lng, lat]);
-          });
-        }
+      if (onPointClick) {
+        el.addEventListener("click", () => {
+          onPointClick(feature, [lng, lat]);
+        });
+      }
 
-        const marker = new Marker({ element: el })
-          .setLngLat([lng, lat])
-          .addTo(map);
+      const marker = new Marker({ element: el })
+        .setLngLat([lng, lat])
+        .addTo(map);
 
-        markersRef.current.push(marker);
-        containersRef.current.push(el);
-      });
-
-      setRevision((n) => n + 1);
+      markersRef.current.push(marker);
+      containersRef.current.push(el);
     });
+
+    setRevision((n) => n + 1);
 
     return () => {
       markersRef.current.forEach((m) => m.remove());

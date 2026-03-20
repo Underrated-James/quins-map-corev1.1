@@ -1,261 +1,214 @@
-# Leaflet Kit (Polished API)
+# Quins-map
 
-This project now includes a curated Leaflet-based React API with defaults, layers, controls, async GeoJSON, clustering, and plugin auto-loading.
+Quins-map is an elite, highly optimized, and fully declarative mapping ecosystem for React, built natively on top of MapLibre GL. 
 
-## Install
+It is designed to be **lightweight**, **accessible**, **production-ready**, and **developer-friendly**, providing an arsenal of advanced GIS features—from clustering and dynamic OSRM routing to accessible screen-reader bindings—all strictly optimized for zero-overhead tree-shaking and immediate VDOM integrations.
+
+---
+
+## 🚀 Quick Start
+
+### Installation
 
 ```bash
-pnpm add leaflet @types/leaflet
+npm install maplibre-gl lucide-react @quins-map/core
 ```
 
-Optional plugins (only needed if you use these features):
-
-```bash
-pnpm add leaflet.heat leaflet.vectorgrid leaflet.markercluster leaflet-draw leaflet-routing-machine
-```
-
-Make sure Leaflet CSS is imported once:
-
-```ts
-// src/main.tsx
-import 'leaflet/dist/leaflet.css'
-```
-
-## Quick Start
-
+Ensure you import the native MapLibre core CSS in your layout or root entry:
 ```tsx
-import { Map } from './components/ui/map'
-
-export default function App() {
-  return (
-    <div style={{ width: '100vw', height: '100vh' }}>
-      <Map />
-    </div>
-  )
-}
+import 'maplibre-gl/dist/maplibre-gl.css';
 ```
 
-### Built-in Size Props
+---
 
-You can set size directly on `Map`. If not provided, it fills the parent.
+## 🌍 The `StoreLocation` Declarative API
 
+`<StoreLocation />` is a hyper-optimized wrapper interface. It prevents GPU memory leaks, destroys inactive layers, handles all WebGL context bindings safely behind the scenes, and mounts MapLibre securely.
+
+Here are the diverse ways to configure `<StoreLocation />` sequentially based on your application's needs:
+
+### 1. Basic Uncontrolled Map
+Extremely simple and intuitive right out of the box. Uncontrolled but declarative.
 ```tsx
-<Map width={420} height={280} />
-```
+import { StoreLocation } from '@/components/ui/map';
 
-Works with responsive sizes too:
-
-```tsx
-<Map width="100%" height="320px" />
-```
-
-### Border Radius
-
-`Map` has a default rounded corner. You can override or disable it:
-
-```tsx
-<Map borderRadius={0} />
-```
-
-## StoreMap (Ecommerce-Style Wrapper)
-
-`StoreMap` is a domain-friendly wrapper that renders a clean ecommerce map by default
-(dark tiles, store markers, and routes) while keeping GIS layers optional.
-
-```tsx
-import StoreMap from './components/StoreMap'
-
-const stores = [
-  { id: 's1', name: 'Manila Center', lat: 14.5995, lng: 120.9842 },
-  { id: 's2', name: 'Intramuros', lat: 14.5896, lng: 120.9747 },
-]
-
-const routes = [
-  {
-    id: 'r1',
-    path: [
-      [14.5995, 120.9842],
-      [14.5942, 120.9926],
-      [14.5896, 120.9747],
-    ],
-  },
-]
-
-<StoreMap
-  stores={stores}
-  routes={routes}
-  features={{ clustering: true, routes: true }}
-/>;
-```
-
-Optional GIS layers stay off unless enabled:
-
-```tsx
-<StoreMap
-  stores={stores}
-  routes={routes}
-  features={{ labels: true, heatmap: true, geojson: true }}
-  geojsonData="/data/zone.json"
-  heatPoints={[
-    [14.5995, 120.9842, 0.8],
-    [14.604, 120.989, 0.6],
-  ]}
+<StoreLocation 
+  center={[-74.006, 40.7128]} 
+  zoom={12} 
 />
 ```
 
-## Official API
-
-**Core**
-- `Map` — base map with safe defaults
-- `useMap()` — access the Leaflet map instance
-
-**Markers**
-- `Marker` — single marker with popup and custom content
-- `MarkerLayer` — marker list with clustering by default
-
-**Layers and Sources**
-- `TileLayer` — add a tile layer
-- `GeoJSONLayer` — render GeoJSON (supports async data)
-- `PolylineLayer` — route lines
-- `Source` — async GeoJSON source
-- `Layer` — Leaflet-like layer wrapper for `Source`
-
-**Controls**
-- `Control` — built-in controls (`zoom`, `scale`, `attribution`)
-
-**Plugins**
-- `HeatLayer` — heat maps (leaflet.heat)
-- `VectorTileLayer` — vector tiles (leaflet.vectorgrid)
-- `MarkerClusterGroup` — clustering group (leaflet.markercluster)
-- `DrawControl` — drawing tools (leaflet-draw)
-- `RoutingControl` — routing (leaflet-routing-machine)
-- `MapPlugin` — custom plugin hook
-- `registerLeafletPlugin` — override/extend plugin loaders
-- `useLeafletPlugin` — auto-load plugins safely
-- `StoreMap` — ecommerce wrapper with optional GIS features
-
-## Map Defaults
-
-`Map` works without props. Defaults:
-- `center` = `[14.5995, 120.9842]`
-- `zoom` = `13`
-- Default dark tiles (Carto Dark, no labels) with labels overlay enabled
-
-### Advanced GIS Toggle
-
-If you pass `advancedGIS={true}`, a small GIS widget appears on the map.
-It lets users turn on optional layers (labels, GeoJSON, heatmap, vector tiles)
-only when data is provided.
-
+### 2. Fully Controlled Map Viewport
+Full control over the viewport state cleanly synced back to React state without forced remounts.
 ```tsx
-<Map
-  center={[14.5995, 120.9842]}
-  zoom={13}
-  advancedGIS
-  advancedGISConfig={{
-    geojson: '/data/zone.json',
-    heatPoints: [
-      [14.5995, 120.9842, 0.8],
-      [14.604, 120.989, 0.6],
-    ],
-    heatOptions: {
-      gradient: { 0.4: '#22c55e', 0.7: '#facc15', 1.0: '#ef4444' },
-    },
+const [viewport, setViewport] = useState({ center: [-74.006, 40.7128], zoom: 8, bearing: 0, pitch: 0 });
+
+<StoreLocation 
+  viewport={viewport} 
+  onViewportChange={setViewport} 
+/>
+```
+
+### 3. Custom Tile Styles
+Bring your own map styles dynamically (support for OpenStreetMap, Carto, Maptiler, etc.).
+```tsx
+<StoreLocation
+  center={[-0.1276, 51.5074]}
+  zoom={15}
+  styles={{
+    light: "https://tiles.openfreemap.org/styles/bright",
+    dark: "https://tiles.openfreemap.org/styles/liberty"
   }}
 />
 ```
 
-Disable default tiles if you want full control:
-
+### 4. Interactive Map Controls
+Easily composite MapLibre HUD controls.
 ```tsx
-<Map defaultTiles={false}>
-  <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-</Map>
-```
-
-## Custom Marker (React Content)
-
-```tsx
-<Marker
-  position={[14.5995, 120.9842]}
->
-  <div className="custom-pin">
-    <div className="pin-core" />
-  </div>
-</Marker>
-```
-
-## MarkerLayer with Clustering by Default
-
-```tsx
-<MarkerLayer
-  data={places}
-  getPosition={(p) => p.position}
-  renderMarker={(p) => (
-    <div className="custom-pin">
-      <div className="pin-core" />
-    </div>
-  )}
+<StoreLocation
+  center={[2.3522, 48.8566]}
+  zoom={11}
+  controls={{
+    enabled: true,
+    position: "bottom-right",
+    showZoom: true,
+    showCompass: true,
+    showLocate: true,
+  }}
 />
 ```
 
-Clustering auto-activates if `leaflet.markercluster` is installed. If not, it gracefully falls back to normal markers.
-
-## Async GeoJSON Loading
-
+### 5. Standard Interactive Markers
+Array of DOM markers supporting native tooltip overlays.
 ```tsx
-const loadGeoJSON = async () => {
-  const res = await fetch('/data/area.json')
-  return res.json()
-}
-
-<Source data={loadGeoJSON}>
-  <Layer style={{ color: '#111', weight: 2, fillOpacity: 0.08 }} />
-</Source>
+<StoreLocation
+  center={[-73.98, 40.76]}
+  zoom={12}
+  markers={[
+    { 
+      id: "es", 
+      lng: -73.9857, 
+      lat: 40.7484, 
+      tooltip: "Empire State Building" 
+    }
+  ]}
+/>
 ```
 
-You can also pass a URL directly:
-
+### 6. Rich Popup Architecture
+Generate beautiful, stylized, and standardized popup cards automatically by supplying raw data.
 ```tsx
-<GeoJSONLayer data="/data/area.json" />
+<StoreLocation
+  center={[-73.98, 40.74]}
+  zoom={11}
+  markers={[
+    {
+      id: 1,
+      lng: -73.9632,
+      lat: 40.7794,
+      richPopup: {
+        name: "Art Museum",
+        category: "Museum",
+        rating: 4.8,
+        reviews: 12453,
+        hours: "10:00 AM - 5:00 PM",
+        image: "https://url.to/image.jpg",
+        onDirectionsClick: () => alert("Navigating...")
+      }
+    }
+  ]}
+/>
 ```
 
-## React‑Leaflet‑Like Composition
-
+### 7. Draggable Marker State (Admin mode)
+Isolate heavy drag interactions to safely update backend coordinates without impacting sibling layers.
 ```tsx
-<Map>
-  <Control type="scale" position="bottomleft" />
-  <Source data={loadGeoJSON}>
-    <Layer />
-  </Source>
-</Map>
+const [location, setLocation] = useState({ lng: -73.98, lat: 40.75 });
+
+<StoreLocation
+  draggableMarker={{
+    enabled: true,
+    lat: location.lat,
+    lng: location.lng,
+    onLocationChange: setLocation
+  }}
+/>
 ```
 
-## Events
-
-`Map` supports standard Leaflet events:
-- `onClick`
-- `onDblClick`
-- `onContextMenu`
-- `onMouseMove`
-- `onMouseDown`
-- `onMouseUp`
-- `onMove`
-- `onMoveStart`
-- `onMoveEnd`
-- `onZoom`
-- `onZoomStart`
-- `onZoomEnd`
-- `onViewChange`
-
-## Plugin Auto-Loading
-
-Plugin components call `useLeafletPlugin()` internally. If a plugin is installed, it auto-loads. If not, it warns once and falls back safely.
-
-You can override plugin loaders:
-
-```ts
-import { registerLeafletPlugin } from './components/ui/map'
-
-registerLeafletPlugin('heat', { module: 'leaflet.heat' })
+### 8. Native Coordinate Plotting (Route)
+Render raw, explicit geometric vectors safely. Great for plane tracking or static boundaries.
+```tsx
+<StoreLocation
+  route={{
+    coordinates: [
+      [-73.9857, 40.7484],
+      [-73.9855, 40.758],
+      [-73.9772, 40.7527]
+    ],
+    color: "#10b981",
+    width: 6
+  }}
+/>
 ```
+
+### 9. Dynamic OSRM Real-world Routing (Road-Aware)
+Automatically hit public or private OSRM routing engines. Support for infinite coordinates (`waypoints`) snapping correctly to road geometry. Completely accessible with built-in ARIA roles and duration HUDs.
+```tsx
+<StoreLocation
+  center={[-122.4194, 37.805]}
+  zoom={11.5}
+  dynamicRoute={{
+    enabled: true,
+    waypoints: [
+      [-122.4783, 37.8199], // Golden Gate
+      [-122.4182, 37.8080], // Fisherman's Wharf
+      [-122.4058, 37.8024]  // Coit Tower
+    ],
+    showAlternatives: false,
+    color: "#3b82f6",
+    osrmUrl: "https://router.project-osrm.org" // Optional fallback
+  }}
+/>
+```
+
+### 10. High-Performance Client WebGL Clusters
+Calculate and merge thousands of distinct map points effortlessly leveraging native GPU clustering.
+```tsx
+<StoreLocation
+  cluster={{
+    enabled: true,
+    data: geojsonFeatureCollection,
+    clusterColors: ["#3b82f6", "#f59e0b", "#ef4444"]
+  }}
+/>
+```
+
+### 11. GeoJSON Polygonal Overlays
+Inject standard custom Polygons, delivery ranges, or sales territories seamlessly onto the canvas layer hierarchy.
+```tsx
+<StoreLocation
+  customLayers={[
+    {
+      id: "zone-a",
+      data: geojsonPolygon,
+      fillColor: "#22c55e",
+      strokeColor: "#16a34a",
+      fillOpacity: 0.4,
+      onMouseEnter: (e) => console.log("Entered Zone!", e)
+    }
+  ]}
+/>
+```
+
+---
+
+## 🛡 Ecosystem & Architecture Benefits
+
+Quins-map completely redefines map usage for typical frontend teams:
+
+- **Isolated Hooks:** Separation of bounds management (`useViewport`) and side-effects `useOsrmRoutes` strictly segregates memory allocations from view renders.
+- **Tree-Shakable Interfaces:** Importing `<StoreLocation />` or a specialized HUD module leaves unrequested utilities entirely out of the Final Webpack/Vite bundle chunk.
+- **A11y Forward:** Employs `<MarkerLabel>`, dynamic ARIA tracking, and focusability specifically required for enterprise and governmental tooling compliance.
+- **Production CI-Grade:** Enforced typing strictness (zero standard `any` references) ensuring interface safety matching explicit GeoJSON generic types natively.
+
+Enjoy zero constraints as you construct advanced geospatial components natively in React!

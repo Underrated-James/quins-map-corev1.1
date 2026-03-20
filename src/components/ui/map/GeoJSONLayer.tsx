@@ -51,10 +51,11 @@ function GeoJSONLayer({
 }: GeoJSONLayerProps) {
   const { map, isLoaded } = useMap();
   const id = useId();
-  const sourceId = `geojson-source-${id}`;
-  const fillLayerId = `geojson-fill-${id}`;
-  const lineLayerId = `geojson-line-${id}`;
-  const pointLayerId = `geojson-point-${id}`;
+  const safeId = id.replace(/:/g, "");
+  const sourceId = `geojson-source-${safeId}`;
+  const fillLayerId = `geojson-fill-${safeId}`;
+  const lineLayerId = `geojson-line-${safeId}`;
+  const pointLayerId = `geojson-point-${safeId}`;
   const propsRef = useRef({ fillColor, fillOpacity, strokeColor, strokeWidth, strokeOpacity, pointRadius, pointColor });
 
   // Add source and layers
@@ -71,7 +72,7 @@ function GeoJSONLayer({
       id: fillLayerId,
       type: "fill",
       source: sourceId,
-      filter: ["any", ["==", "$type", "Polygon"], ["==", "$type", "MultiPolygon"]],
+      filter: ["==", ["geometry-type"], "Polygon"],
       paint: {
         "fill-color": fillColor,
         "fill-opacity": fillOpacity,
@@ -84,10 +85,8 @@ function GeoJSONLayer({
       type: "line",
       source: sourceId,
       filter: ["any",
-        ["==", "$type", "LineString"],
-        ["==", "$type", "MultiLineString"],
-        ["==", "$type", "Polygon"],
-        ["==", "$type", "MultiPolygon"],
+        ["==", ["geometry-type"], "LineString"],
+        ["==", ["geometry-type"], "Polygon"]
       ],
       paint: {
         "line-color": strokeColor,
@@ -105,7 +104,7 @@ function GeoJSONLayer({
       id: pointLayerId,
       type: "circle",
       source: sourceId,
-      filter: ["==", "$type", "Point"],
+      filter: ["==", ["geometry-type"], "Point"],
       paint: {
         "circle-color": pointColor,
         "circle-radius": pointRadius,

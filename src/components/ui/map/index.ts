@@ -5,6 +5,8 @@
 
 // ── Core ───────────────────────────────────────────────────────────
 export { MapCanvas, MapSkeleton } from "./MapCanvas";
+export { Map } from "./Map";
+export type { MapProps } from "./Map";
 export { useMap } from "./context";
 export { useViewport, useMapEvents, useResolvedTheme } from "./hooks";
 export { tilePresets, defaultStyles } from "./themes";
