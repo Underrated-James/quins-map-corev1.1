@@ -281,3 +281,15 @@
   transform: translateY(0);
   pointer-events: auto;
 }
+
+.relative {
+  position: relative;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}

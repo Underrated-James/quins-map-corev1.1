@@ -11,12 +11,46 @@ It is designed to be **lightweight**, **accessible**, **production-ready**, and 
 ### Installation
 
 ```bash
-npm install maplibre-gl lucide-react @quins-map/core
+npm install maplibre-gl lucide-react underrated-didyeey-quins-map
 ```
 
-Ensure you import the native MapLibre core CSS in your layout or root entry:
+Ensure you import the native MapLibre core CSS and the library stylesheet in your layout or root entry:
 ```tsx
-import 'maplibre-gl/dist/maplibre-gl.css';
+import 'maplibre-gl/dist/maplibre-gl.css'
+import 'underrated-didyeey-quins-map/style.css'
+import { Map } from 'underrated-didyeey-quins-map' 
+
+function App() {
+  return (
+    <>
+      <section id="center" style={{ width: '100vw', height: '60vh' }}>
+        <Map
+          center={[-74.006, 40.7128]}
+          zoom={12}
+        />
+      </section>
+
+    </>
+  )
+}
+
+export default App 
+```
+
+To ensure your map renders with the correct dimensions, add the following utility classes to your global CSS (e.g., `index.css`):
+
+```css
+.relative {
+  position: relative;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
 ```
 
 ---
